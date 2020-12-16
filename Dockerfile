@@ -8,12 +8,21 @@ RUN apt-get update && apt-get install -y nginx php \
 						php-zip php-gd php-mbstring \
 						php-curl php-xml php-pear php-bcmath \
 						supervisor
-						
-# copy files
-RUN cd ~ && mkdir YOURLS 
-WORKDIR ~/YOURLS
-COPY . .
-COPY ./docker/yourls.conf /etc/nginx/conf.d/
+		
+RUN useradd -m --uid 1000 --gid 50 docker		
+RUN echo export APACHE_RUN_USER=docker >> /etc/apache2/envvars
+RUN echo export APACHE_RUN_GROUP=staff >> /etc/apache2/envvars
+
+COPY docker/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+COPY . /var/www/html
+RUN a2enmod rewrite
+
+WORKDIR /var/www/html
+RUN chown -R docker /var/www/html
+
+############ INITIAL APPLICATION SETUP #####################
+
+WORKDIR /var/www/html
 
 # define envs
 ENV YOURLS_DB_HOST localhost
@@ -22,7 +31,6 @@ ENV YOURLS_DB_PASS fjkle!#AUY
 ENV YOURLS_DB_NAME yourls
 ENV YOURLS_DB_PREFIX yourls_
 
-ENV YOURLS_SITE localhost
 ENV YOURLS_HOURS_OFFSET -5
 ENV YOURLS_PRIVATE true
 ENV YOURLS_UNIQUE_URLS true
@@ -35,11 +43,13 @@ ENV YOURLS_PRIVATE_INFOS true
 ENV YOURLS_PRIVATE_API true
 ENV YOURLS_NOSTATS false
 
-# expose port
 EXPOSE 80
 
-# chown
-RUN chown -R www-data:www-data ~/YOURLS
+
+USER root
+
+COPY docker/supervisor-exit-event-listener /usr/bin/supervisor-exit-event-listener
+RUN chmod +x docker/setup.sh /usr/bin/supervisor-exit-event-listener
 
 # CMD ["/bin/sh","-c","while true; do echo hello; sleep 10;done"]
 CMD ["./docker/setup.sh"]
