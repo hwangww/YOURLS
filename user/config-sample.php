@@ -33,6 +33,12 @@ define( 'YOURLS_DB_PREFIX', '$YOURLS_DB_PREFIX' );
  ** Site options
  */
 
+/** YOURLS installation URL
+ ** All lowercase, no trailing slash at the end.
+ ** If you define it to "http://sho.rt", don't use "http://www.sho.rt" in your browser (and vice-versa)
+ ** To use an IDN domain (eg http://héhé.com), write its ascii form here (eg http://xn--hh-bjab.com) */
+define( 'YOURLS_SITE', '$YOURLS_SITE' );
+
 /** YOURLS language
  ** Change this setting to use a translation file for your language, instead of the default English.
  ** That translation file (a .mo file) must be installed in the user/language directory.

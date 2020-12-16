@@ -10,6 +10,7 @@ if [ ! -x "$config_file" ]; then
 		sed -i "s/\$YOURLS_DB_PASS/$YOURLS_DB_PASS/g" $config_file
 		sed -i "s/\$YOURLS_DB_NAME/$YOURLS_DB_NAME/g" $config_file
 		sed -i "s/\$YOURLS_DB_PREFIX/$YOURLS_DB_PREFIX/g" $config_file
+		sed -i "s/\$YOURLS_SITE/$YOURLS_SITE/g" $config_file
 		sed -i "s/\$YOURLS_HOURS_OFFSET/$YOURLS_HOURS_OFFSET/g" $config_file
 		sed -i "s/\$YOURLS_PRIVATE/$YOURLS_PRIVATE/g" $config_file
 		sed -i "s/\$YOURLS_UNIQUE_URLS/$YOURLS_UNIQUE_URLS/g" $config_file
